@@ -1,19 +1,37 @@
 #!/usr/bin/env node
 
-var httpProxy = require('http-proxy') , bhost="localhost", bport=8080
+var httpProxy = require('http-proxy') , tport=8080, proxyport=9090, express = require('express'),
+	session = require('express-session'), bodyParser = require('body-parser')
+
+var passwd={"carlos":"test","test":"test"};
+
+var app = express();
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'))
+app.use(session({
+	"secret":"asd473592734ih"
+	,resave: true
+	,saveUninitialized: true
+}));
+
 
 var ivuser="admin";
+var options={ target: { host: 'localhost', port: tport } };
+var proxy = httpProxy.createProxyServer(options);
+app.post('/check_credentials', function(req, res) {
+	const name = req.body.username;
+	const password= req.body.password;
+	if(passwd[name]===password){
+		req.session.username=name;
+		req.session.password=password;
+		res.redirect('/');
+	}else res.send('<p>invalid credentials</p>');
+});
+app.get('/*', function(req, res) {
+    req.headers['iv-user']=ivuser;
+    if(req.session.username)try{proxy.proxyRequest(req, res, { host: 'localhost', port: tport });}catch(e){}
+    else res.render('login',{name:req.session.username});
+});
+app.listen(proxyport);
 
-httpProxy.createServer(function (req, res, proxy) {
-  req.headers['iv-user']=ivuser;
-  proxy.proxyRequest(req, res, { host: 'localhost', port: bport });
-}).listen(9090);
-
-
-require('net').createServer(function (socket) {
-  console.log("connected");
-  socket.on('data', function (data) {
-	ivuser=data.toString().trim();
-	console.log("changing ivuser to "+ivuser);
-  });
-}).listen(9091);
