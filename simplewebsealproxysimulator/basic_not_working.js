@@ -30,7 +30,12 @@ app.post('/check_credentials', function(req, res) {
 });
 app.get('/*', function(req, res) {
     req.headers['iv-user']=ivuser;
-    if(req.session.username)try{proxy.proxyRequest(req, res, { host: 'localhost', port: tport });}catch(e){}
+    if(req.session.username)try{
+	let url=req.protocol + '://' + req.get('host') + req.originalUrl;
+	console.log(`redirecting ${url} to ${options.target.host}:${options.target.port}`);
+	proxy.proxyRequest(req, res, { host: options.target.host, port: options.target.port});
+	return;
+    }catch(e){return;}
     else res.render('login',{name:req.session.username});
 });
 app.listen(proxyport);
