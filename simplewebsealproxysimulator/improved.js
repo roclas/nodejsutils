@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const tport=8080, proxyport=9090, address2proxy="172.17.0.1"; 
+const tport=8080, proxyport=9090, address2proxy="172.17.0.1", contextpath="/"; 
 const buildQueryString=a=>Object.keys(a).reduce((acc,e)=>acc+e+"="+a[e]+"&","?").replace(/&$/,"");
 
 const queryString = require('querystring'),express = require('express'), bodyParser = require('body-parser'),
@@ -30,21 +30,20 @@ app.post('/check_credentials', function(req, res) {
 	if(passwd[name]===password){
 		req.session.username=name;
 		req.session.password=password;
-		res.redirect('/');
+		res.redirect(contextpath);
 	}else res.send('<p>invalid credentials</p>');
 });
 
-app.all('/*', (oreq, ores) => {
+app.all(`${contextpath}*`, (oreq, ores) => {
   oreq.headers['iv-user']=ivuser;
   if(!oreq.session.username){
     ores.render('login',{name:oreq.session.username});
     return;
   }
   const options = {
-    //host: 'a.host', // host to forward to
     host:address2proxy, // host to forward to
     port: tport, // port to forward to
-    path: oreq.path+buildQueryString(oreq.query), // path to forward to
+    path:oreq.originalUrl,
     method: oreq.method, // request method
     headers: oreq.headers, // headers to send
   };
