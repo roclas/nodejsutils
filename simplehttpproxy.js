@@ -1,4 +1,4 @@
-var tport=80, proxyport=9090, express = require('express'), bodyParser = require('body-parser');
+var tport=8080, proxyport=9090, express = require('express'), bodyParser = require('body-parser');
 var queryString = require('querystring');
 
 const buildQueryString=a=>Object.keys(a).reduce((acc,e)=>acc+e+"="+a[e]+"&","?").replace(/&$/,"");
@@ -12,16 +12,11 @@ app.use(express.static('public'))
 
 app.all('/*', (oreq, ores) => {
   const options = {
-    // host to forward to
-    host: 'a.host',
-    // port to forward to
-    port: 8080,
-    // path to forward to
-    path: oreq.path+buildQueryString(oreq.query),
-    // request method
-    method: oreq.method,
-    // headers to send
-    headers: oreq.headers,
+    host: 'a.host', // host to forward to
+    port: tport, // port to forward to
+    path: oreq.path+buildQueryString(oreq.query), // path to forward to
+    method: oreq.method, // request method
+    headers: oreq.headers, // headers to send
   };
   let creq = http.request(options, pres => {
       // set encoding
@@ -34,15 +29,11 @@ app.all('/*', (oreq, ores) => {
         ores.end();
       }); // finished, let's finish client request as well
     }).on('error', e => {
-      // we got an error
-      console.log(e.message);
+      console.error(e.message);
       try {
-        // attempt to set error message and http status
         ores.writeHead(500);
         ores.write(e.message);
-      } catch (e) {
-        // ignore
-      }
+      } catch (e) { }
       ores.end();
     });
   if(oreq.body){
