@@ -1,26 +1,27 @@
 {
-    "name"        : "simplecssproxy",
-    "version"     : "0.0.1",
+    "name": "simplecssproxy",
+    "version": "0.0.1",
     "dependencies": {
-        "http-proxy": ">=0.10.3",
+        "batch": ">=0.5.0",
         "connect": ">=2.11.0",
-        "mkdirp"  : ">=0.3.5",
-        "express":">=2.5.4",
-	"q":">=0.9.6",
-	"forever":">=0.10.10",
-	"multiparty":">=3.1.1",
-	"readable-stream":">=1.1.9",
-	"knox":">=0.8.8",
-	"batch":">=0.5.0",
-	"posix":">=0.1.22"
+        "express": "^4.17.1",
+        "forever": ">=0.10.10",
+        "http": "0.0.1-security",
+        "http-proxy": ">=0.10.3",
+        "knox": ">=0.8.8",
+        "mkdirp": ">=0.3.5",
+        "multiparty": ">=3.1.1",
+        "posix": ">=0.1.22",
+        "puppeteer": "^19.8.5",
+        "q": ">=0.9.6",
+        "readable-stream": ">=1.1.9",
+        "readline-vim": "^0.3.2"
     },
-
     "repository": {
         "type": "git",
-        "url" : "https://github.com/QuickTutorials/nodeJS.git"
+        "url": "https://github.com/QuickTutorials/nodeJS.git"
     },
-    "engines"   : {
+    "engines": {
         "node": ">= 0.8.0"
     }
 }
-
