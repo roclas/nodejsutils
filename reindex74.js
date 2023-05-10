@@ -4,15 +4,16 @@ const puppeteer = require('puppeteer');
 
 const user=`${process.argv[2]}`;
 const password=`${process.argv[3]}`;
+const baseUrl=`${process.argv[4]?process.argv[4]:"http://localhost:8080"}`;
 
 async function run () {
 
 	//const browser = await puppeteer.launch();
-	const browser = await puppeteer.launch({headless:false,defaultViewport: null, devtools:true, args: ['--start-maximized'], userDataDir: './cache' });
+	const browser = await puppeteer.launch({headless:false,defaultViewport: null, devtools:false, args: ['--start-maximized'], userDataDir: './cache',ignoreHTTPSErrors: true });
 	const page = await browser.newPage();
 	page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36');
-	let url0="http://localhost:8080/c/portal/login";
-	let url1="http://localhost:8080/group/guest/~/control_panel/manage?p_p_id=com_liferay_portal_search_admin_web_portlet_SearchAdminPortlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_com_liferay_portal_search_admin_web_portlet_SearchAdminPortlet_tabs1=index-actions";
+	let url0=`${baseUrl}/c/portal/login`;
+	let url1=`${baseUrl}/group/guest/~/control_panel/manage?p_p_id=com_liferay_portal_search_admin_web_portlet_SearchAdminPortlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_com_liferay_portal_search_admin_web_portlet_SearchAdminPortlet_tabs1=index-actions`;
 	
 	/*
 	let authHeader=false;
@@ -40,14 +41,15 @@ async function run () {
 
 	await page.goto(url1);
 	try{
-		await page.setDefaultTimeout(10000);
-		await page.$eval('button[data-cmd=reindex]', el => el.click());
+		await page.focus('button[data-cmd=reindex]');
+		await page.keyboard.type('\n');
 		console.log("reindexing...");
+		await page.setDefaultTimeout(5000);
 	}catch(err){
 		console.log(err);
 	}
 
-	//process.exit(0);
+	setTimeout(() => process.exit(0),20000);//close everything after 10 seconds
 
 }
 
