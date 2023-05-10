@@ -4,6 +4,7 @@ const puppeteer = require('puppeteer');
 
 const user=`${process.argv[2]}`;
 const password=`${process.argv[3]}`;
+console.log(`user=${user} and password=${password}`);
 const baseUrl=`${process.argv[4]?process.argv[4]:"http://localhost:8080"}`;
 
 async function run () {
@@ -41,15 +42,15 @@ async function run () {
 
 	await page.goto(url1);
 	try{
+		await page.waitForSelector('button[data-cmd=reindex]');
 		await page.focus('button[data-cmd=reindex]');
-		await page.keyboard.type('\n');
+		setTimeout(() => page.keyboard.type('\n'),2000);
 		console.log("reindexing...");
-		await page.setDefaultTimeout(5000);
 	}catch(err){
 		console.log(err);
 	}
 
-	setTimeout(() => process.exit(0),20000);//close everything after 10 seconds
+	setTimeout(() => process.exit(0),20000);//close everything after N seconds
 
 }
 
