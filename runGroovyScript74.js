@@ -25,7 +25,7 @@ async function run () {
 	
 	await page.goto(url0);
 	try{
-		await page.setDefaultTimeout(40000);
+		await page.setDefaultTimeout(600000); //10 minutes
 		await page.waitForSelector('input[type=text]');
 		await page.type('input[type=text]', user);
   		await page.type('input[type=password]', password);
@@ -44,15 +44,16 @@ async function run () {
 		await page.waitForSelector('.save-server-button');
 		await page.$eval('textarea', (el,value) => el.value = value, groovyScript);
 		await page.focus('.save-server-button');
-		setTimeout(() => page.keyboard.type('\n'),3000);
+		setTimeout(() => page.keyboard.type('\n'),5000);
 		await page.waitForSelector('pre');
 		const result= await page.$eval('pre', element => element.innerHTML);
 		console.log(result);
+		process.exit(0);//ALL GOOD!!!
 	}catch(err){
 		console.log(err);
 	}
 
-	setTimeout(() => process.exit(0),60000);//close everything after N seconds
+	setTimeout(() => process.exit(0),600000);//close everything after 10 minutes (if nothing happened before)
 
 }
 
