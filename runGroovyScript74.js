@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const user=`${process.argv[2]}`;
 const password=`${process.argv[3]}`;
-console.log(`user=${user} and password=${password}`);
+//console.log(`user=${user} and password=${password}`);
 const filePath=process.argv[4];
 const baseUrl=`${process.argv[5]?process.argv[5]:"http://localhost:8080"}`;
 let groovyScript="Please use the path of your groovy script file as the third parameter";
@@ -25,7 +25,7 @@ async function run () {
 	
 	await page.goto(url0);
 	try{
-		await page.setDefaultTimeout(20000);
+		await page.setDefaultTimeout(40000);
 		await page.waitForSelector('input[type=text]');
 		await page.type('input[type=text]', user);
   		await page.type('input[type=password]', password);
@@ -44,7 +44,7 @@ async function run () {
 		await page.waitForSelector('.save-server-button');
 		await page.$eval('textarea', (el,value) => el.value = value, groovyScript);
 		await page.focus('.save-server-button');
-		setTimeout(() => page.keyboard.type('\n'),2000);
+		setTimeout(() => page.keyboard.type('\n'),3000);
 		await page.waitForSelector('pre');
 		const result= await page.$eval('pre', element => element.innerHTML);
 		console.log(result);
@@ -52,7 +52,7 @@ async function run () {
 		console.log(err);
 	}
 
-	setTimeout(() => process.exit(0),20000);//close everything after N seconds
+	setTimeout(() => process.exit(0),60000);//close everything after N seconds
 
 }
 
