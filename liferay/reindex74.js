@@ -28,9 +28,10 @@ async function run () {
 	await page.goto(url0);
 	try{
 		await page.setDefaultTimeout(10000);
-		await page.waitForSelector('input[type=text]');
-		await page.type('input[type=text]', user);
+		await page.waitForSelector('input[type=text][name$=login]');
+		await page.evaluate( (u) => document.querySelector('input[type=text][name$=login]').value = u, user)
   		await page.type('input[type=password]', password);
+		await page.waitForSelector('button[type=submit]');
 		await Promise.all([
   			page.waitForNavigation(),
 			page.click('button[type=submit]')

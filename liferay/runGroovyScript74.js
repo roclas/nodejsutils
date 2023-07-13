@@ -16,8 +16,11 @@ async function run () {
 
 	//const browser = await puppeteer.launch();
 	//const browser = await puppeteer.launch({headless:false,defaultViewport: null, devtools:false, args: ['--start-maximized'], userDataDir: './cache',ignoreHTTPSErrors: true });
-	const browser = await puppeteer.launch({headless:false,defaultViewport: null, devtools:false, args: ['--start-maximized'], ignoreHTTPSErrors: true });
+	const browser = await puppeteer.launch({headless:false,defaultViewport: null, devtools:false, args: ['--start-maximized'], ignoreHTTPSErrors: true, protocolTimeout: 600000 });
 	const page = await browser.newPage();
+	await page.setDefaultTimeout(600000); //10 minutes
+	await page.setDefaultNavigationTimeout(600000); //10 minutes
+
 	page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36');
 	//let url0=`${baseUrl}/c/portal/login`;
 	let url0=`${baseUrl}/admin`;
@@ -25,7 +28,6 @@ async function run () {
 	
 	await page.goto(url0);
 	try{
-		await page.setDefaultTimeout(600000); //10 minutes
 		await page.waitForSelector('input[type=text]');
 		await page.type('input[type=text]', user);
   		await page.type('input[type=password]', password);
