@@ -41,8 +41,10 @@ async function run () {
 		console.log(err);
 	}
 
+	let cookies = await page.cookies();
+	let jsessionid=cookies.filter(x=>x.name.match(/JSESSIONID/i)).find(x=>true).value;
 	let token= await page.evaluate(() => Liferay.authToken );
-	console.log(token);
+	console.log(token,jsessionid);
 
 	setTimeout(() => process.exit(0),2000);//close everything after a few ms
 
