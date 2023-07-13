@@ -44,7 +44,7 @@ async function run () {
 	let token= await page.evaluate(() => Liferay.authToken );
 	console.log(token);
 
-	setTimeout(() => process.exit(0),20000);//close everything after N seconds
+	setTimeout(() => process.exit(0),2000);//close everything after a few ms
 
 
 }
