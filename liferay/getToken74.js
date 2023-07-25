@@ -14,6 +14,7 @@ async function run () {
 	const page = await browser.newPage();
 	page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36');
 	let url0=`${baseUrl}/c/portal/login`;
+	if(baseUrl.match(/(\.dev\.|\.qa\.|\.uat\.)/))url0=`${baseUrl}/admin`;//TODO:delete this line
 	let url1=`${baseUrl}/group/guest/~/control_panel/manage?p_p_id=com_liferay_portal_search_admin_web_portlet_SearchAdminPortlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_com_liferay_portal_search_admin_web_portlet_SearchAdminPortlet_tabs1=index-actions`;
 	
 	/*
